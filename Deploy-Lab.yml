@@ -1,0 +1,11 @@
+---
+- name: Deploy Container Compute Hosts
+
+  hosts: hostnames
+  roles:
+    - { role: homebrew }
+    - { role: docker, brew_path: "/home/labadmin/.linuxbrew/bin" }
+    - { role: lxc, become: true }
+
+
+

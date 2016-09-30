@@ -1,0 +1,20 @@
+---
+# tasks file for lxc
+#- name: Install LXC and Packages - Ubuntu
+#  apt:
+#    name: "{{ item }}"
+#    state: absent
+#  with_items:
+#    - lxc
+#    - bridge-utils
+
+#Spin Up Test Container:
+#- name: Create Test LXC Container 1
+#  lxc_container:
+#    name: test_container1
+#    state: started
+#    container_log: true
+#    template: ubuntu
+#    template_options: --release xenial
+
+

@@ -1,0 +1,3 @@
+---
+# defaults file for homebrew
+variable_one: "This is from the default file"

@@ -1,0 +1,57 @@
+---
+# Installs Homebrew Package Manager
+- name: Install Dependencies - Ubuntu
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - build-essential
+    - ruby
+    - curl
+    - git
+    - python-setuptools
+  when: ansible_os_family == "Debian"
+  become: true
+
+- name: Install Dependencies - Centos/RHEL
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - curl
+    - git
+    - irb
+    - python-setuptools
+    - ruby
+    - "@Development tools"
+  when: ansible_os_family == "Redhat"
+  become: true
+
+
+- name: Check if Homebrew is already installed
+  shell: ls -la | grep linuxbrew
+  register: homebrew_present
+  ignore_errors: true
+
+#Cant install as root!
+- name: Install Homebrew
+  shell: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+  become: false
+  when: homebrew_present.rc != 0
+
+- name: Set environment variables
+  blockinfile:
+    state: present
+    dest: /home/labadmin/.bashrc
+    marker: "# {mark} Ansible Managed Block"
+    content: |
+      export PATH="$HOME/.linuxbrew/bin:$PATH"
+      export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
+      export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
+
+- name: Test Homebrew
+  homebrew:
+    path: /home/labadmin/.linuxbrew/bin
+    update_homebrew: yes
+
+  

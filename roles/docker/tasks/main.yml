@@ -1,0 +1,18 @@
+---
+# tasks file for docker
+- name: Setup Directory for Ceph
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "/ceph"
+    - "/ceph/config"
+    - "/ceph/datastore"
+  become: true
+
+- name: Install Docker and Packages
+  homebrew:
+    path: "{{ brew_path }}"
+    name: docker
+    state: present
+    update_homebrew: yes
