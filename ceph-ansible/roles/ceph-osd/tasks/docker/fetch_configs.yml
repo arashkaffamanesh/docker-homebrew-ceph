@@ -11,7 +11,7 @@
     path="{{ playbook_dir }}/{{ fetch_directory }}/docker_mon_files/{{ item.0 }}"
   become: false
   with_together:
-      - ceph_config_keys
+      - "{{ ceph_config_keys }}"
 
 - name: stat for ceph config and keys
   local_action: stat path={{ fetch_directory }}/docker_mon_files/{{ item }}

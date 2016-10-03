@@ -10,9 +10,56 @@
     - "/ceph/datastore"
   become: true
 
-- name: Install Docker and Packages
-  homebrew:
-    path: "{{ brew_path }}"
-    name: docker
+
+#Not installing docker with homebrew temporarily, until APT is working
+#- name: Install Docker and Packages
+#  homebrew:
+#    path: "{{ brew_path }}"
+#    name: docker
+#    state: absent
+#    update_homebrew: yes
+
+#- name: Create  Bridge Interface
+#  template:
+#    src: interfaces.j2
+#    dest: /etc/network/interfaces
+#    mode: 0644
+#    backup: yes
+#  notify: restart networking
+
+
+- name: Install Apt and HTTP Certs
+  apt:
+    name: "{{ item }}"
     state: present
-    update_homebrew: yes
+  with_items:
+    - "apt-transport-https"
+    - "ca-certificates"
+    
+- name: Install APT Key
+  apt_key:
+    keyserver: hkp://p80.pool.sks-keyservers.net:80
+    id: 58118E89F3A912897C070ADBF76221572C52609D
+    
+- name: Add Apt Repository
+  apt_repository:
+    repo: "deb https://apt.dockerproject.org/repo ubuntu-xenial main"
+    state: present
+    update_cache: true
+
+- name: Install Docker
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items:
+    - "docker-engine"
+    - "docker"
+    - "docker.io"
+
+- name: Start Docker
+  service:
+    name: docker
+    state: started
+    enabled: true
+

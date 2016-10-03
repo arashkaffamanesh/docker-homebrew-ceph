@@ -1,4 +1,9 @@
 ---
+#Local Hacking
+- name: debugging
+  debug:
+    msg: "{{  ceph_mon_docker_interface }}"
+
 - include: deploy_monitors.yml
   when: not mon_containerized_deployment
 

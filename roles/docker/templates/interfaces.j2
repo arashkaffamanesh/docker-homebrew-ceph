@@ -1,0 +1,21 @@
+# This File is controlled by Ansible, CHANGES WILL BE OVERWRITTEN!
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto {{ ansible_default_ipv4.alias }}
+iface {{ ansible_default_ipv4.alias }} inet manual
+  pre-up ip link set {{ ansible_default_ipv4.alias }} up
+#BEGIN - Bridge Interface Configuration
+auto br-ceph
+  iface br-ceph inet dhcp
+  bridge_ports {{ ansible_default_ipv4.alias }}
+  bridge_stp off
+  bridge_fd 0
+  bridge_maxwait 0
+#END - Bridge Interface Configuration
+

@@ -1,11 +1,17 @@
 ---
-- name: Deploy Container Compute Hosts
-
-  hosts: hostnames
+- name: Deploy Container Hosts
+  become: true
+  hosts: container_hosts
   roles:
-    - { role: homebrew }
-    - { role: docker, brew_path: "/home/labadmin/.linuxbrew/bin" }
-    - { role: lxc, become: true }
+
+#Installs Homebrew
+    - { role: homebrew, become: false }
+
+#TODO: Deploy docker with Brew.  Using apt for now. 
+    - { role: docker }
+
+#Future Role
+    - { role: lxc}
 
 
 
